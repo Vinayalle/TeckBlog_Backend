@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: techblogs
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update   # use create-drop once to verify
+    show-sql: true
