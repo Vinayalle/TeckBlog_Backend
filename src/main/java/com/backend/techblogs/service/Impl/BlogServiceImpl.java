@@ -1,6 +1,7 @@
 package com.backend.techblogs.service.Impl;
 
 import com.backend.techblogs.dto.request.CreateBlogRequest;
+import com.backend.techblogs.dto.response.BlogListResponse;
 import com.backend.techblogs.dto.response.BlogResponse;
 import com.backend.techblogs.dto.response.SeoResponse;
 import com.backend.techblogs.entity.Blog;
@@ -102,14 +103,17 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Page<Blog> getAllBlogs(int page, int size, String sortBy, String direction) {
+    public Page<BlogListResponse> getAllBlogs(int page, int size, String sortBy, String direction) {
         Sort sort = direction.equalsIgnoreCase("desc")
                 ? Sort.by(sortBy).descending()
                 : Sort.by(sortBy).ascending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Blog> blogPage=blogRepository.findAll(pageable);
 
-        return blogRepository.findAll(pageable);
+        return blogPage.map(blog ->
+                modelMapper.map(blog, BlogListResponse.class)
+        );
     }
 
     @Override

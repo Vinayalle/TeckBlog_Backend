@@ -2,6 +2,7 @@ package com.backend.techblogs.controller;
 
 
 import com.backend.techblogs.dto.request.CreateBlogRequest;
+import com.backend.techblogs.dto.response.BlogListResponse;
 import com.backend.techblogs.dto.response.BlogResponse;
 import com.backend.techblogs.entity.Blog;
 import com.backend.techblogs.service.BlogService;
@@ -30,7 +31,7 @@ public class BlogController {
 
 
     @GetMapping
-    public ResponseEntity<Page<Blog>> getAllBlogs(
+    public ResponseEntity<Page<BlogListResponse>> getAllBlogs(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "publishedDate") String sortBy,
