@@ -4,10 +4,8 @@ import com.backend.techblogs.dto.request.CreateBlogRequest;
 import com.backend.techblogs.dto.response.BlogListResponse;
 import com.backend.techblogs.dto.response.BlogResponse;
 import com.backend.techblogs.dto.response.SeoResponse;
-import com.backend.techblogs.entity.Blog;
-import com.backend.techblogs.entity.Category;
-import com.backend.techblogs.entity.SeoMetadata;
-import com.backend.techblogs.entity.Tag;
+import com.backend.techblogs.entity.*;
+import com.backend.techblogs.repository.BlogLikeRepository;
 import com.backend.techblogs.repository.BlogRepository;
 import com.backend.techblogs.repository.CategoryRepository;
 import com.backend.techblogs.repository.TagRepository;
@@ -35,6 +33,9 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private  BlogRepository blogRepository;
+
+    @Autowired
+    private BlogLikeRepository blogLikeRepository;
     @Autowired
     private  CategoryRepository categoryRepository;
     @Autowired
@@ -240,6 +241,28 @@ public class BlogServiceImpl implements BlogService {
         return "Blog Deleted Successfully";
 
 
+    }
+
+    @Override
+    public int likeBlog(Long blogId, String clientIp) {
+        if (blogLikeRepository.existsByBlogIdAndClientIp(blogId, clientIp)) {
+            throw new RuntimeException("Already liked");
+        }
+
+        System.out.println(clientIp);
+
+        Blog blog = blogRepository.findById(blogId)
+                .orElseThrow(() -> new RuntimeException("Blog not found"));
+
+        blog.setLikeCount(blog.getLikeCount() + 1);
+        blogRepository.save(blog);
+
+        BlogLike like = new BlogLike();
+        like.setBlogId(blogId);
+        like.setClientIp(clientIp);
+        blogLikeRepository.save(like);
+
+        return blog.getLikeCount();
     }
 
 }

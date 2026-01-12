@@ -6,6 +6,7 @@ import com.backend.techblogs.dto.response.BlogListResponse;
 import com.backend.techblogs.dto.response.BlogResponse;
 import com.backend.techblogs.entity.Blog;
 import com.backend.techblogs.service.BlogService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/blogs")
@@ -21,6 +23,8 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
+
+
 
     @PostMapping
     public ResponseEntity<Blog> createBlog(
@@ -63,6 +67,20 @@ public class BlogController {
        String isDeleted = blogService.deleteById(id);
         return  new ResponseEntity<>(isDeleted,HttpStatus.OK);
 
+    }
+
+    @PostMapping("/{id}/like")
+    public ResponseEntity<?> likeBlog(
+            @PathVariable Long id,
+            HttpServletRequest request) {
+
+        String clientIp = request.getRemoteAddr();
+
+        int likes = blogService.likeBlog(id, clientIp);
+
+        return ResponseEntity.ok(
+                Map.of("likes", likes)
+        );
     }
 
 

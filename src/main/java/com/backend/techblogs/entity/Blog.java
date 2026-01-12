@@ -61,4 +61,6 @@ public class Blog {
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private Set<Tag> tags = new HashSet<>();
+
+    private int likeCount;
 }

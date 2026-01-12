@@ -17,4 +17,6 @@ public interface BlogService {
      BlogResponse getBlogById(Long id);
 
     String deleteById(Long id);
+
+    int likeBlog(Long id, String clientIp);
 }
