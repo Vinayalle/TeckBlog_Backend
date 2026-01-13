@@ -265,4 +265,24 @@ public class BlogServiceImpl implements BlogService {
         return blog.getLikeCount();
     }
 
+    @Override
+    public BlogResponse getBlogBySlug(String slug) {
+        Blog blog = blogRepository.findBySlug(slug)
+                .orElseThrow(() -> new RuntimeException("Blog not found"));
+
+        BlogResponse response = modelMapper.map(blog, BlogResponse.class);
+
+        // Manual mapping for relations
+        response.setCategory(blog.getCategory().getName());
+
+        response.setTags(
+                blog.getTags()
+                        .stream()
+                        .map(Tag::getName)
+                        .collect(Collectors.toList())
+        );
+
+        return response;
+    }
+
 }
