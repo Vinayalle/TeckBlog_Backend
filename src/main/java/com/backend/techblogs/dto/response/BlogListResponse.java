@@ -1,5 +1,6 @@
 package com.backend.techblogs.dto.response;
 
+import com.backend.techblogs.entity.Category;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -16,5 +17,5 @@ public class BlogListResponse {
     private String author;
     private LocalDate publishedDate;
     private Integer readTime;
-    private String category;
+    private Category category;
 }
